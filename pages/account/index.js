@@ -2,8 +2,8 @@ import { useState,useEffect } from "react"
 import { useRouter } from "next/router"
 import styles from"../../styles/Account.module.css"
 import axios from "axios"
-import loader from "../../components/loader"
 import Loader from "../../components/loader"
+import AsyncLocalStorage from '@createnextapp/async-local-storage'
 
 export default function Account(props){
 
@@ -45,6 +45,20 @@ export default function Account(props){
         }
     }
 
+    const saveInStorage = async(tokens,msg) => {
+        try {
+            await AsyncLocalStorage.setItem('tokens', JSON.stringify(tokens))
+            setSuccess(true)
+            setMsg(msg)
+            setTimeout(() => {
+                router.push('/home')
+            },1000)
+        }catch (err){
+            setSuccess(false)
+            setMsg("something wrong happened !, please try again")
+        }
+    }
+
     const login = () => {
         if(showMsg){
             clear()
@@ -67,18 +81,16 @@ export default function Account(props){
                     setLoading(false)
                     setShowMsg(true)
                     if(res.data.status == "success"){
-                        setSuccess(true)
-                        setTimeout(() => {
-                            router.push('/home')
-                        },1000)
+                        saveInStorage(res.data.tokens,res.data.msg)
+                    }else{
+                        setMsg(res.data.msg)
                     }
-                    setMsg(res.data.msg)
                 },3000)
             }).catch(() => {
                 setTimeout(() => {
                     setLoading(false)
                     setShowMsg(true)
-                    setMsg("something wrong happened !")
+                    setMsg("something wrong happened !, please try again")
                 },3000)
             })
         }
@@ -120,7 +132,7 @@ export default function Account(props){
                 setTimeout(() => {
                     setLoading(false)
                     setShowMsg(true)
-                    setMsg("something wrong happened !")
+                    setMsg("something wrong happened !, please try again")
                 },3000)
             })
         }

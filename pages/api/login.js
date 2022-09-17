@@ -21,7 +21,10 @@ export default function handler(req, res) {
         // })
         res.send(res.send({
             status:"success",
-            msg:"success"
+            msg:"success",
+            tokens:{
+                token:'sssssss',
+            }
         }))
     }catch(err){
         res.send("connection error")
