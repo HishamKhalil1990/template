@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function handler(req, res) {
-    const { data } = req.body
+    const data = req.body
     const baseURL = 'http://localhost:3033'
     const urls = {
         saveDataURL: "save-data",
@@ -9,7 +9,7 @@ export default function handler(req, res) {
     try{
         axios({
             baseURL,
-            url:urls.getDataURL,
+            url:urls.saveDataURL,
             method:"post",
             timeout:10000,
             headers:{'Content-Type': 'application/json'},
