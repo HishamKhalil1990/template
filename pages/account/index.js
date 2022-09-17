@@ -66,15 +66,18 @@ export default function Account(props){
         if(username != "" && password != ""){
             setLoading(true)
             axios({
-                url: '/api/login',
+                url: '/api',
                 method: 'post',
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json'
                 },
                 data: JSON.stringify({
-                    username:username,
-                    password:password
+                    data:{
+                        username:username,
+                        password:password
+                    },
+                    url:"loginURL"
                 })
             }).then((res) => {
                 setTimeout(() => {
@@ -103,17 +106,20 @@ export default function Account(props){
         if(usernameSign != "" && emailSign != "" && passwordSign != "" && confirm != ""){
             setLoading(true)
             axios({
-                url: '/api/register',
+                url: '/api',
                 method: 'post',
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json'
                 },
                 data: JSON.stringify({
-                    username:usernameSign,
-                    email:emailSign,
-                    password:passwordSign,
-                    confirm:confirm
+                    data:{
+                        username:usernameSign,
+                        email:emailSign,
+                        password:passwordSign,
+                        confirm:confirm
+                    },
+                    url:"registerURL"
                 })
             }).then((res) => {
                 setTimeout(() => {
