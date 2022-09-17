@@ -297,8 +297,14 @@
 	align-items: center;
 }
 
-.textH6 {
+.errTextH6 {
 	color: red;
+	margin: 0;
+	height: fit-content;
+}
+
+.successTextH6 {
+	color: green;
 	margin: 0;
 	height: fit-content;
 }

@@ -19,7 +19,10 @@ export default function handler(req, res) {
         // }).catch(err => {
         //     res.send("internal error")
         // })
-        res.send(`${data.username} and ${data.password}`)
+        res.send(res.send({
+            status:"success",
+            msg:"success"
+        }))
     }catch(err){
         res.send("connection error")
     }

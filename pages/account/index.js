@@ -2,6 +2,8 @@ import { useState,useEffect } from "react"
 import { useRouter } from "next/router"
 import styles from"../../styles/Account.module.css"
 import axios from "axios"
+import loader from "../../components/loader"
+import Loader from "../../components/loader"
 
 export default function Account(props){
 
@@ -14,15 +16,28 @@ export default function Account(props){
     const [emailSign,setEmailSign] = useState("")
     const [passwordSign,setPasswordSign] = useState("")
     const [confirm,setConfirm] = useState("")
-    const [showErrMsg,setShowErrMsg] = useState(false)
+    const [msg,setMsg] = useState("")
+    const [success,setSuccess] = useState("")
+    const [showMsg,setShowMsg] = useState(false)
+    const [loading,setLoading] = useState(false)
+
+    const clear = () => {
+        setShowMsg(false)
+        setMsg("")
+        setSuccess(false)
+    }
 
     const changeForm =(type) => {
+        if(showMsg){
+            clear()
+        }
         if(type != form){
             if(form == 'login'){
                 setUsername("")
                 setPassword("")
             }else{
                 setUsernameSign("")
+                setEmailSign("")
                 setPasswordSign("")
                 setConfirm("")
             }
@@ -31,7 +46,11 @@ export default function Account(props){
     }
 
     const login = () => {
+        if(showMsg){
+            clear()
+        }
         if(username != "" && password != ""){
+            setLoading(true)
             axios({
                 url: '/api/login',
                 method: 'post',
@@ -44,14 +63,33 @@ export default function Account(props){
                     password:password
                 })
             }).then((res) => {
-                console.log(res.data)
-                router.push('/home')
+                setTimeout(() => {
+                    setLoading(false)
+                    setShowMsg(true)
+                    if(res.data.status == "success"){
+                        setSuccess(true)
+                        setTimeout(() => {
+                            router.push('/home')
+                        },1000)
+                    }
+                    setMsg(res.data.msg)
+                },3000)
+            }).catch(() => {
+                setTimeout(() => {
+                    setLoading(false)
+                    setShowMsg(true)
+                    setMsg("something wrong happened !")
+                },3000)
             })
         }
     }
 
     const signUp = () => {
+        if(showMsg){
+            clear()
+        }
         if(usernameSign != "" && emailSign != "" && passwordSign != "" && confirm != ""){
+            setLoading(true)
             axios({
                 url: '/api/register',
                 method: 'post',
@@ -66,8 +104,24 @@ export default function Account(props){
                     confirm:confirm
                 })
             }).then((res) => {
-                console.log(res.data)
-                changeForm('login')
+                setTimeout(() => {
+                    setLoading(false)
+                    setShowMsg(true)
+                    if(res.data.status == "success"){
+                        setSuccess(true)
+                        setTimeout(() => {
+                            clear()
+                            changeForm('login')
+                        },1000)
+                    }
+                    setMsg(res.data.msg)
+                },3000)
+            }).catch(() => {
+                setTimeout(() => {
+                    setLoading(false)
+                    setShowMsg(true)
+                    setMsg("something wrong happened !")
+                },3000)
             })
         }
     }
@@ -96,10 +150,18 @@ export default function Account(props){
                                     </div>
                                     <a href="/account/forgetPassword">forget password?</a>
                                     </fieldset>
-                                    <button type="submit" className={styles.btnLogin} onClick={login}>Login</button>
-                                    {showErrMsg?
+                                    {loading?
+                                        <Loader/>
+                                        :
+                                        <button type="submit" className={styles.btnLogin} onClick={login}>Login</button>
+                                    }
+                                    {showMsg?
                                         <div className={styles.msg}>
-                                            <h6 className={styles.textH6}>wrong username or password</h6>
+                                            {success?
+                                                <h6 className={styles.successTextH6}>{msg}</h6>
+                                                :
+                                                <h6 className={styles.errTextH6}>{msg}</h6>
+                                            }
                                         </div>
                                         :
                                         <></>
@@ -182,10 +244,18 @@ export default function Account(props){
                                         <input id="signupPassword-confirm" type="password" required value={confirm} onChange={e => setConfirm(e.target.value)} />
                                     </div>
                                     </fieldset>
-                                    <button type="submit" className={styles.btnSignup} onClick={signUp}>Continue</button>
-                                    {showErrMsg?
+                                    {loading?
+                                        <Loader/>
+                                        :
+                                        <button type="submit" className={styles.btnSignup} onClick={signUp}>Continue</button>
+                                    }
+                                    {showMsg?
                                         <div className={styles.msg}>
-                                            <h6 className={styles.textH6}>wrong username or password</h6>
+                                            {success?
+                                                <h6 className={styles.successTextH6}>{msg}</h6>
+                                                :
+                                                <h6 className={styles.errTextH6}>{msg}</h6>
+                                            }
                                         </div>
                                         :
                                         <></>
