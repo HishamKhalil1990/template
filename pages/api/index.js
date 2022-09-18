@@ -24,6 +24,7 @@ export default function handler(req, res) {
         // }).catch(err => {
         //     res.send("internal error")
         // })
+        console.log(data)
         res.send(res.send({
             status:"success",
             msg:"registered",

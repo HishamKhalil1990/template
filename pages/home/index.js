@@ -4,6 +4,8 @@ import AsyncLocalStorage from '@createnextapp/async-local-storage'
 import axios from 'axios'
 import styles from "../../styles/Home.module.scss"
 import Spinner from '../../components/spinner'
+import BillData from '../../components/billData'
+import MaltransData from '../../components/maltransData'
 
 export default function Home(props){
 
@@ -49,7 +51,7 @@ export default function Home(props){
     const HomeLayout = () => {
         
         const [billNo, setBillNo] = useState("")
-        const [billData, setBillData] = useState({})
+        const [billData, setBillData] = useState({data:1})
         const [msg,setMsg] = useState("")
         const [showMsg,setShowMsg] = useState(false)
         const [innerLoading,setInnerLoading] = useState(false)
@@ -181,9 +183,9 @@ export default function Home(props){
                             </div>
                         :
                             <>
-                                {billData.length > 0?
+                                {Object.keys(billData).length > 0?
                                     <div>
-                                        data
+                                        <MaltransData/>
                                     </div>
                                 :
                                     <></>
