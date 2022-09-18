@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from "next/router"
 import AsyncLocalStorage from '@createnextapp/async-local-storage'
 import Account from './account'
+import Spinner from '../components/spinner'
 
 export default function Home() {
 
@@ -37,7 +38,15 @@ export default function Home() {
     <>
       {
       loading?
-        <div>loading</div>
+        <div style={{
+          height:"100vh",
+          width:"100%",
+          display:"flex",
+          justifyContent:"center",
+          alignItems:"center",
+        }}>
+          <Spinner/>
+        </div>
       :
         <Account/>
       }

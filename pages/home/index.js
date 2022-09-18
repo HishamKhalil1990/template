@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import AsyncLocalStorage from '@createnextapp/async-local-storage'
 import axios from 'axios'
 import styles from "../../styles/Home.module.scss"
+import Spinner from '../../components/spinner'
 
 export default function Home(props){
 
@@ -59,6 +60,7 @@ export default function Home(props){
                 setShowMsg(false)
             }
             if(billNo != ""){
+                setInnerLoading(true)
                 axios({
                     url: '/api',
                     method: 'post',
@@ -73,16 +75,20 @@ export default function Home(props){
                         url:"getDataURL"
                     })
                 }).then((res) => {
-                    setInnerLoading(false)
+                    setTimeout(() => {
+                        setInnerLoading(false)
+                        console.log(res.data)
+                    },1000)
                 }).catch(() => {
-                    setInnerLoading(false)
-                    setShowMsg(true)
-                    setMsg("something wrong happened !, please try again")
+                    setTimeout(() => {
+                        setInnerLoading(false)
+                        setShowMsg(true)
+                        setMsg("something wrong happened !, please try again")
+                    },1000)
                 })
             }else{
-                setInnerLoading(false)
                 setShowMsg(true)
-                setMsg("please insert bill no.")
+                setMsg("please insert bill of lading no.")
             }
         }
 
@@ -167,7 +173,23 @@ export default function Home(props){
                         </div>
                     </header>	
                     <div className={styles.content}>
-                        {/* content here */}
+                        {innerLoading?
+                            <div style={{
+                                marginTop:"100px"
+                            }}>
+                                <Spinner/>
+                            </div>
+                        :
+                            <>
+                                {billData.length > 0?
+                                    <div>
+                                        data
+                                    </div>
+                                :
+                                    <></>
+                                }
+                            </>
+                        }
                     </div>
                 </main>
             </div>
@@ -178,7 +200,15 @@ export default function Home(props){
         <>
             {
             loading?
-                <div>loading</div>
+            <div style={{
+                height:"100vh",
+                width:"100%",
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center",
+            }}>
+                <Spinner/>
+            </div>
             :
                 <HomeLayout/>
             }
