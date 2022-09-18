@@ -50,6 +50,7 @@ export default function Account(props){
             let day = new Date();
             day = day.getDay();
             tokens.day = day
+            tokens.username = username
             await AsyncLocalStorage.setItem('tokens', JSON.stringify(tokens))
             setSuccess(true)
             setMsg(msg)
