@@ -4,8 +4,9 @@ import AsyncLocalStorage from '@createnextapp/async-local-storage'
 import axios from 'axios'
 import styles from "../../styles/Home.module.scss"
 import Spinner from '../../components/spinner'
-import BillData from '../../components/billData'
 import MaltransData from '../../components/maltransData'
+
+let prevBillNo = ""
 
 export default function Home(props){
 
@@ -51,17 +52,23 @@ export default function Home(props){
     const HomeLayout = () => {
         
         const [billNo, setBillNo] = useState("")
-        const [billData, setBillData] = useState({data:1})
+        const [billData, setBillData] = useState({})
         const [msg,setMsg] = useState("")
         const [showMsg,setShowMsg] = useState(false)
         const [innerLoading,setInnerLoading] = useState(false)
+
+        const clear = () => {
+            prevBillNo = ""
+            setBillData({})
+        }
 
         const getData = async() => {
             if(showMsg){
                 setMsg("")
                 setShowMsg(false)
             }
-            if(billNo != ""){
+            if(billNo != "" && billNo != prevBillNo){
+                prevBillNo = billNo
                 setInnerLoading(true)
                 axios({
                     url: '/api',
@@ -79,16 +86,24 @@ export default function Home(props){
                 }).then((res) => {
                     setTimeout(() => {
                         setInnerLoading(false)
-                        console.log(res.data)
+                        if(res.data.status == "success"){
+                            setBillData(res.data.data)
+                        }else{
+                            clear()
+                            setShowMsg(true)
+                            setMsg(res.data.msg)
+                        }
                     },1000)
                 }).catch(() => {
                     setTimeout(() => {
+                        clear()
                         setInnerLoading(false)
                         setShowMsg(true)
                         setMsg("something wrong happened !, please try again")
                     },1000)
                 })
-            }else{
+            }else if(billNo == ""){
+                clear()
                 setShowMsg(true)
                 setMsg("please insert bill of lading no.")
             }

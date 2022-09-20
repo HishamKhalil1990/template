@@ -1,21 +1,66 @@
 import {useState} from 'react';
-import axios from 'axios';
 
 export default function MaltransData(props){
 
     function FileUpload(){
-        const [selectedFile, setSelectedFile] = useState();
-        const [isSelected, setIsSelected] = useState(false);
+        const [selectedFileOne, setSelectedFileOne] = useState();
+        const [selectedFileTwo, setSelectedFileTwo] = useState();
+        const [selectedFileThree, setSelectedFileThree] = useState();
+        const [selectedFileFour, setSelectedFileFour] = useState();
+        const [isSelectedOne, setIsSelectedOne] = useState(false);
+        const [isSelectedTwo, setIsSelectedTwo] = useState(false);
+        const [isSelectedThree, setIsSelectedThree] = useState(false);
+        const [isSelectedFour, setIsSelectedFour] = useState(false);
     
-        const changeHandler = (event) => {
-            setSelectedFile(event.target.files[0]);
-            setIsSelected(true);
+        const changeHandler = (event,fileNo) => {
+            switch(fileNo){
+                case 1:
+                    setSelectedFileOne(event.target.files[0]);
+                    setIsSelectedOne(true);
+                    break;
+                case 2:
+                    setSelectedFileTwo(event.target.files[0]);
+                    setIsSelectedTwo(true);
+                    break;
+                case 3:
+                    setSelectedFileThree(event.target.files[0]);
+                    setIsSelectedThree(true);
+                    break;
+                case 4:
+                    setSelectedFileFour(event.target.files[0]);
+                    setIsSelectedFour(true);
+                    break;
+                default:
+                    break;
+            }
         };
     
         const handleSubmission = () => {
             const formData = new FormData();
-            formData.append('File', selectedFile);
-            // console.log(selectedFile)
+            if(isSelectedOne){
+                formData.append('FileOne', selectedFileOne);
+            }else{
+                formData.append('FileOne', 'empty');
+            }
+            if(isSelectedTwo){
+                formData.append('FileTwo', selectedFileTwo);
+            }
+            else{
+                formData.append('FileTwo', 'empty');
+            }
+            if(isSelectedThree){
+                formData.append('FileThree', selectedFileThree);
+            }
+            else{
+                formData.append('FileThree', 'empty');
+            }
+            if(isSelectedFour){
+                formData.append('FileFour', selectedFileFour);
+            }
+            else{
+                formData.append('FileFour', 'empty');
+            }
+            // console.log(selectedFileOne)
             fetch(
                 '/api',
                 {
@@ -34,19 +79,61 @@ export default function MaltransData(props){
     
         return(
             <div>
-                <input type="file" name="file" onChange={changeHandler} />
-                {isSelected ? (
+                <input type="file" name="file" onChange={e => changeHandler(e,1)} />
+                {isSelectedOne ? (
                     <div>
-                        <p>Filename: {selectedFile.name}</p>
-                        <p>Filetype: {selectedFile.type}</p>
-                        <p>Size in bytes: {selectedFile.size}</p>
+                        <p>Filename: {selectedFileOne.name}</p>
+                        <p>Filetype: {selectedFileOne.type}</p>
+                        <p>Size in bytes: {selectedFileOne.size}</p>
                         <p>
                             lastModifiedDate:{' '}
-                            {selectedFile.lastModifiedDate.toLocaleDateString()}
+                            {selectedFileOne.lastModifiedDate.toLocaleDateString()}
                         </p>
                     </div>
                 ) : (
-                    <p>Select a file to show details</p>
+                    <></>
+                )}
+                <input type="file" name="file" onChange={e => changeHandler(e,2)} />
+                {isSelectedTwo ? (
+                    <div>
+                        <p>Filename: {selectedFileTwo.name}</p>
+                        <p>Filetype: {selectedFileTwo.type}</p>
+                        <p>Size in bytes: {selectedFileTwo.size}</p>
+                        <p>
+                            lastModifiedDate:{' '}
+                            {selectedFileTwo.lastModifiedDate.toLocaleDateString()}
+                        </p>
+                    </div>
+                ) : (
+                    <></>
+                )}
+                <input type="file" name="file" onChange={e => changeHandler(e,3)} />
+                {isSelectedThree ? (
+                    <div>
+                        <p>Filename: {selectedFileThree.name}</p>
+                        <p>Filetype: {selectedFileThree.type}</p>
+                        <p>Size in bytes: {selectedFileThree.size}</p>
+                        <p>
+                            lastModifiedDate:{' '}
+                            {selectedFileThree.lastModifiedDate.toLocaleDateString()}
+                        </p>
+                    </div>
+                ) : (
+                    <></>
+                )}
+                <input type="file" name="file" onChange={e => changeHandler(e,4)} />
+                {isSelectedFour ? (
+                    <div>
+                        <p>Filename: {selectedFileFour.name}</p>
+                        <p>Filetype: {selectedFileFour.type}</p>
+                        <p>Size in bytes: {selectedFileFour.size}</p>
+                        <p>
+                            lastModifiedDate:{' '}
+                            {selectedFileFour.lastModifiedDate.toLocaleDateString()}
+                        </p>
+                    </div>
+                ) : (
+                    <></>
                 )}
                 <div>
                     <button onClick={handleSubmission}>Submit</button>

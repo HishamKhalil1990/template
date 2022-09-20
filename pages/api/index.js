@@ -24,12 +24,17 @@ export default function handler(req, res) {
         // }).catch(err => {
         //     res.send("internal error")
         // })
-        console.log(data)
         res.send(res.send({
             status:"success",
             msg:"registered",
             tokens:{
                 token:'ggggggg',
+                username:'hisham',
+                email:'hisham@gmail.com'
+            },
+            data:{
+                fieldOne:"red",
+                fieldTwo:"green"
             }
         }))
     }catch(err){
