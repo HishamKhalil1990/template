@@ -29,6 +29,12 @@ export default function handler(req, res) {
             msg:"registered",
             tokens:{
                 token:'ggggggg',
+                username:'hisham',
+                email:'hisham@gmail.com'
+            },
+            data:{
+                fieldOne:"red",
+                fieldTwo:"green"
             }
         }))
     }catch(err){

@@ -1,9 +1,9 @@
-import { useState,useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/router"
-import styles from"../../styles/Account.module.css"
-import axios from "axios"
-import Loader from "../../components/loader"
 import AsyncLocalStorage from '@createnextapp/async-local-storage'
+import axios from "axios"
+import styles from"../../styles/Account.module.css"
+import Loader from "../../components/loader"
 
 export default function Account(props){
 
@@ -47,6 +47,9 @@ export default function Account(props){
 
     const saveInStorage = async(tokens,msg) => {
         try {
+            let day = new Date();
+            day = day.getDay();
+            tokens.day = day
             await AsyncLocalStorage.setItem('tokens', JSON.stringify(tokens))
             setSuccess(true)
             setMsg(msg)
