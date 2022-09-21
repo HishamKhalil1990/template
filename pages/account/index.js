@@ -94,7 +94,7 @@ export default function Account(props){
                 setTimeout(() => {
                     setLoading(false)
                     setShowMsg(true)
-                    setMsg("no internet connection!, please try again")
+                    setMsg("server shutdown or connection lost!, please try again")
                 },3000)
             })
         }
@@ -137,7 +137,7 @@ export default function Account(props){
                 setTimeout(() => {
                     setLoading(false)
                     setShowMsg(true)
-                    setMsg("no internet connection!, please try again")
+                    setMsg("server shutdown or connection lost!, please try again")
                 },3000)
             })
         }
