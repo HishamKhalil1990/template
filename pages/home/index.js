@@ -208,9 +208,9 @@ export default function Home(props){
                         :
                             <>
                                 {Object.keys(billData).length > 0?
-                                    <div>
+                                    <div className={styles.contentContainer}>
                                         <BillData data={billData}/>
-                                        <MaltransData/>
+                                        {/* <MaltransData/> */}
                                     </div>
                                 :
                                     <></>
