@@ -5,6 +5,7 @@ import axios from 'axios'
 import styles from "../../styles/Home.module.scss"
 import Spinner from '../../components/spinner'
 import MaltransData from '../../components/maltransData'
+import BillData from '../../components/billData'
 
 let prevBillNo = ""
 
@@ -14,6 +15,8 @@ export default function Home(props){
 
     const [loading, setLoading] = useState(true)
     const [username, setUsername] = useState("")
+    const [token, setToken] = useState("")
+    const [email, setEmail] = useState("")
  
     useEffect(() => {
         const checkLogin = async() => {
@@ -28,6 +31,8 @@ export default function Home(props){
                     router.push('/account')
                 }else{
                     setUsername(tokens.username)
+                    setToken(tokens.token)
+                    setEmail(tokens.email)
                     setLoading(false)
                 }
             }else{
@@ -71,17 +76,16 @@ export default function Home(props){
                 prevBillNo = billNo
                 setInnerLoading(true)
                 axios({
-                    url: '/api',
+                    baseURL:'http://194.165.152.206:3030',
+                    url: '/bill-of-lading',
                     method: 'post',
                     headers: {
                       'Accept': 'application/json, text/plain, */*',
-                      'Content-Type': 'application/json'
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}`
                     },
                     data: JSON.stringify({
-                        data:{
-                            billNo:billNo,
-                        },
-                        url:"getDataURL"
+                        billNo:billNo,
                     })
                 }).then((res) => {
                     setTimeout(() => {
@@ -92,6 +96,11 @@ export default function Home(props){
                             clear()
                             setShowMsg(true)
                             setMsg(res.data.msg)
+                            if(res.data.status == "unauthorized"){
+                                setTimeout(() => {
+                                    logout()
+                                },1500)
+                            }
                         }
                     },1000)
                 }).catch(() => {
@@ -99,7 +108,7 @@ export default function Home(props){
                         clear()
                         setInnerLoading(false)
                         setShowMsg(true)
-                        setMsg("something wrong happened !, please try again")
+                        setMsg("server shutdown or connection lost!, please try again")
                     },1000)
                 })
             }else if(billNo == ""){
@@ -199,8 +208,9 @@ export default function Home(props){
                         :
                             <>
                                 {Object.keys(billData).length > 0?
-                                    <div>
-                                        <MaltransData/>
+                                    <div className={styles.contentContainer}>
+                                        <BillData data={billData}/>
+                                        {/* <MaltransData/> */}
                                     </div>
                                 :
                                     <></>

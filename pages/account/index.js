@@ -69,18 +69,16 @@ export default function Account(props){
         if(username != "" && password != ""){
             setLoading(true)
             axios({
-                url: '/api',
+                baseURL:'https://alrayhan-rate.herokuapp.com',
+                url: '/check-maltrans-user',
                 method: 'post',
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json'
                 },
                 data: JSON.stringify({
-                    data:{
-                        username:username,
-                        password:password
-                    },
-                    url:"loginURL"
+                    username:username,
+                    password:password
                 })
             }).then((res) => {
                 setTimeout(() => {
@@ -96,7 +94,7 @@ export default function Account(props){
                 setTimeout(() => {
                     setLoading(false)
                     setShowMsg(true)
-                    setMsg("something wrong happened !, please try again")
+                    setMsg("server shutdown or connection lost!, please try again")
                 },3000)
             })
         }
@@ -109,20 +107,18 @@ export default function Account(props){
         if(usernameSign != "" && emailSign != "" && passwordSign != "" && confirm != ""){
             setLoading(true)
             axios({
-                url: '/api',
+                baseURL:'https://alrayhan-rate.herokuapp.com',
+                url: '/register-maltrans-user',
                 method: 'post',
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json'
                 },
                 data: JSON.stringify({
-                    data:{
-                        username:usernameSign,
-                        email:emailSign,
-                        password:passwordSign,
-                        confirm:confirm
-                    },
-                    url:"registerURL"
+                    username:usernameSign,
+                    email:emailSign,
+                    password:passwordSign,
+                    confirmPass:confirm
                 })
             }).then((res) => {
                 setTimeout(() => {
@@ -141,7 +137,7 @@ export default function Account(props){
                 setTimeout(() => {
                     setLoading(false)
                     setShowMsg(true)
-                    setMsg("something wrong happened !, please try again")
+                    setMsg("server shutdown or connection lost!, please try again")
                 },3000)
             })
         }
